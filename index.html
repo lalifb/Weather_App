@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Weather App</title>
+    <link rel="stylesheet" href="style.css" />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <!-- Search Section -->
+      <div class="searchbox">
+        <input type="text" placeholder="Enter city name" class="search-input" />
+        <button class="searchbtn">
+          <i class="fas fa-search"></i>
+        </button>
+      </div>
+
+      <!-- Weather Info -->
+      <div class="weather-box">
+        <div class="location">
+          <i class="fas fa-map-marker-alt"></i>
+          <span class="city">Finfinne</span>
+        </div>
+
+        <div class="weather-info">
+          <img
+            src="https://openweathermap.org/img/wn/02d@2x.png"
+            alt="weather icon"
+            class="weather-icon"
+          />
+          <h1 class="temperature">21°C</h1>
+          <h2 class="description">Partly Cloudy</h2>
+        </div>
+
+        <div class="weather-details">
+          <div class="detail-item">
+            <i class="fas fa-temperature-high"></i>
+            <div class="detail-info">
+              <span class="label">Feels like</span>
+              <span class="Feelslike">23°C</span>
+            </div>
+          </div>
+          <div class="detail-item">
+            <i class="fas fa-water"></i>
+            <div class="detail-info">
+              <span class="label">Humidity</span>
+              <span class="Humidity">68%</span>
+            </div>
+          </div>
+          <div class="detail-item">
+            <i class="fas fa-wind"></i>
+            <div class="detail-info">
+              <span class="label">Wind Speed</span>
+              <span class="WindSpeed">5.4 km/h</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Forecast Section -->
+      <div class="forecast">
+        <h3>5-Day Forecast</h3>
+        <div class="forecast-container">
+          <div class="forecast-item">
+            <span class="day">Mon</span>
+            <img
+              src="https://openweathermap.org/img/wn/01d@2x.png"
+              alt="weather"
+            />
+            <span class="temp">24°C</span>
+          </div>
+          <div class="forecast-item">
+            <span class="day">Tue</span>
+            <img
+              src="https://openweathermap.org/img/wn/02d@2x.png"
+              alt="weather"
+            />
+            <span class="temp">22°C</span>
+          </div>
+          <div class="forecast-item">
+            <span class="day">Wed</span>
+            <img
+              src="https://openweathermap.org/img/wn/03d@2x.png"
+              alt="weather"
+            />
+            <span class="temp">20°C</span>
+          </div>
+          <div class="forecast-item">
+            <span class="day">Thu</span>
+            <img
+              src="https://openweathermap.org/img/wn/10d@2x.png"
+              alt="weather"
+            />
+            <span class="temp">19°C</span>
+          </div>
+          <div class="forecast-item">
+            <span class="day">Fri</span>
+            <img
+              src="https://openweathermap.org/img/wn/01d@2x.png"
+              alt="weather"
+            />
+            <span class="temp">23°C</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Additional Info -->
+      <div class="additional-info">
+        <div class="info-item">
+          <i class="fas fa-sun"></i>
+          <div class="info-detail">
+            <span class="label">Sunrise</span>
+            <span class="value">06:45 AM</span>
+          </div>
+        </div>
+        <div class="info-item">
+          <i class="fas fa-moon"></i>
+          <div class="info-detail">
+            <span class="label">Sunset</span>
+            <span class="value">07:30 PM</span>
+          </div>
+        </div>
+        <div class="info-item">
+          <i class="fas fa-tachometer-alt"></i>
+          <div class="info-detail">
+            <span class="label">Pressure</span>
+            <span class="value">1015 hPa</span>
+          </div>
+        </div>
+        <div class="info-item">
+          <i class="fas fa-eye"></i>
+          <div class="info-detail">
+            <span class="label">Visibility</span>
+            <span class="value">10 km</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      const apiKey = "8aeeb8d07bed0b25ccefda0bd57008a7";
+      const apiUrl =
+        "https://api.openweathermap.org/data/2.5/weather?units=metric&q=";
+      const searchbox = document.querySelector(".searchbox input");
+      const searchbtn = document.querySelector(".searchbtn");
+
+      async function checkWeather(city) {
+        const response = await fetch(apiUrl + city + "&appid=" + apiKey);
+        if (!response.ok) {
+          console.error("Failed to fetch weather data:", response.statusText);
+          return;
+        }
+        var data = await response.json();
+        console.log(data);
+
+        if (data.main) {
+          document.querySelector(".city").innerHTML = data.name;
+          document.querySelector(".temperature").innerHTML =
+            Math.round(data.main.temp) + "°C";
+          document.querySelector(".description").innerHTML =
+            data.weather.description;
+          document.querySelector(".Feelslike").innerHTML =
+            Math.round(data.main.feels_like) + "°C";
+          document.querySelector(".Humidity").innerHTML =
+            data.main.humidity + "%";
+          document.querySelector(".WindSpeed").innerHTML =
+            data.wind.speed + " km/h";
+        } else {
+          console.error("Weather data is missing 'main' property");
+        }
+      }
+
+      searchbtn.addEventListener("click", () => {
+        checkWeather(searchbox.value);
+      });
+    </script>
+  </body>
+</html>
